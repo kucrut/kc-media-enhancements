@@ -4,10 +4,11 @@
 Plugin name: KC Media Enhancements
 Plugin URI: http://kucrut.org/2011/04/kc-media-enhancements/
 Description: Enhance WordPress media/attachment management
-Version: 0.1
+Version: 0.2
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
+Text Domain: kc-media-enhancements
 */
 
 class kcMediaEnhancements {
@@ -38,8 +39,8 @@ class kcMediaEnhancements {
 	public static function settings( $groups ) {
 		$groups[] = array(
 			'prefix'     => 'kc-media-enhancements',
-			'menu_title' => __('KC Media Enhancements', 'kc-media-enhancements'),
-			'page_title' => __('KC Media Enhancements Settings', 'kc-media-enhancements'),
+			'menu_title' => 'KC Media Enhc.',
+			'page_title' => sprintf( __('%s Settings', 'kc-media-enhancements'), 'KC Media Enhancements' ),
 			'options'    => array(
 				'general'  => array(
 					'id'     => 'general',
