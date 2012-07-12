@@ -39,7 +39,7 @@ function my_kcme_options( $options ) {
 add_filter( 'kcme_options', 'my_kcme_options' );
 `
 
-Please replace the taxonomies array keys with the taxonomy names you want to set for the attachment post type.
+Please replace the taxonomies array with the taxonomy names you want to set for the attachment post type.
 
 Options saved by KC Settings will always get the highest priority when the plugin is active.
 

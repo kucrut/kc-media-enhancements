@@ -15,10 +15,7 @@ class kcMediaEnhancements {
 		'defaults' => array(
 			'general' => array(
 				'components' => array( 'insert_custom_size', 'taxonomies' ),
-				'taxonomies' => array(
-					'category' => true,
-					'post_tag' => true
-				)
+				'taxonomies' => array( 'category', 'post_tag' )
 			)
 		)
 	);
@@ -91,24 +88,22 @@ class kcMediaEnhancements {
 			add_filter( 'attachment_fields_to_edit', array(__CLASS__, 'insert_image'), 11, 2 );
 
 		# 1. Attachment taxonomies
-		/*
-		if ( isset($options['general']['components']['taxonomies'])
-					&& $options['general']['components']['taxonomies']
-					&& isset($this->options['general']['taxonomies'])
-					&& is_array($this->options['general']['taxonomies'])
-					&& !empty($this->options['general']['taxonomies']) ) {
+		if (
+			!in_array('taxonomies', $options['general']['components'])
+			|| !is_array($options['general']['taxonomies'])
+			|| empty($options['general']['taxonomies'])
+		)
+			return;
 
-			$taxonomies = array();
-			foreach ( $this->options['general']['taxonomies'] as $key => $val )
-				if ( $val )
-					$taxonomies[] = $key;
+		$taxonomies = array();
+		foreach ( $options['general']['taxonomies'] as $tax )
+			if ( taxonomy_exists( $tax ) )
+				$taxonomies[] = $tax;
 
-			if ( !empty($taxonomies) ) {
-				require_once( $this->inc_path . '/attachment_taxonomies.php' );
-				$do = new kcAttachmentTaxonomies( $taxonomies );
-			}
+		if ( !empty($taxonomies) ) {
+			require_once( self::$data['inc_path'] . '/attachment_taxonomies.php' );
+			kcmeAttachmentTaxonomies::init( $taxonomies );
 		}
-		*/
 	}
 
 
