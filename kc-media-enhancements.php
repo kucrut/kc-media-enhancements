@@ -30,12 +30,8 @@ class kcMediaEnhancements {
 		# i18n
 		load_plugin_textdomain( 'kc-media-enhancements', false, 'kc-media-enhancements/kc-media-enhancements-inc/languages' );
 
-		# Load helpers
-		require_once( self::$data['inc_path'] . '/helpers.php' );
-
 		add_filter( 'kc_plugin_settings', array(__CLASS__, 'settings') );
 		add_action( 'admin_init', array(__CLASS__, 'init') );
-		add_action( 'admin_footer', array(__CLASS__, '_debug') );
 	}
 
 
@@ -141,12 +137,6 @@ class kcMediaEnhancements {
 		$fields['image-size']['html'] = "{$fields['image-size']['html']}\n{$items}";
 
 		return $fields;
-	}
-
-
-	public static function _debug() {
-		//echo '<pre>'.print_r( kcme_get_image_sizes('custom'), true).'</pre>';
-		echo '<pre>'.print_r( self::$data['options'], true).'</pre>';
 	}
 }
 add_action( 'plugins_loaded', array('kcMediaEnhancements', 'prepare') );
