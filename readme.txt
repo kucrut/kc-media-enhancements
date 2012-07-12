@@ -16,7 +16,7 @@ This plugin provides enhancements for media/attachment management, such as the a
 
 1. Use standard WordPress plugin installation or upload the `kc-media-enhancements` directory to your `wp-content/plugins` directory
 2. Activate the plugin through the 'Plugins' menu
-3. Read the FAQ section on readme.txt if you need to enable only certain components
+3. Read the FAQ
 
 == Frequently Asked Questions ==
 
@@ -42,6 +42,10 @@ add_filter( 'kcme_options', 'my_kcme_options' );
 Please replace the taxonomies array with the taxonomy names you want to set for the attachment post type.
 
 Options saved by KC Settings will always get the highest priority when the plugin is active.
+
+= I Don't see the custom size option when I tried to insert an image into posts =
+Either the original image dimension is smaller than the custom size, or you added the custom size *after* the image has been uploaded.
+If this is the case, you need to rebuild the image's thumbnails using Viper007Bond's excellent plugin: [Regenerate Thumbnails] (http://wordpress.org/extend/plugins/regenerate-thumbnails/)
 
 == Screenshots ==
 1. Settings page
