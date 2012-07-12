@@ -117,14 +117,7 @@ class kcMediaEnhancements {
 		if ( !isset($fields['image-size']['html']) || substr($post->post_mime_type, 0, 5) != 'image' )
 			return $fields;
 
-		if ( self::$data['kcSettingsOK'] ) {
-			$_sizes = kcSettings_options::$image_sizes_custom;
-		}
-		else {
-			require_once self::$data['inc_path'] . '/helpers.php';
-			$_sizes = kcme_get_image_sizes( 'custom' );
-		}
-
+		$_sizes = self::$data['kcSettingsOK'] ? kcSettings_options::$image_sizes_custom : self::get_custom_image_sizes();
 		if ( empty($_sizes) )
 			return $fields;
 
@@ -148,6 +141,17 @@ class kcMediaEnhancements {
 		$fields['image-size']['html'] = "{$fields['image-size']['html']}\n{$items}";
 
 		return $fields;
+	}
+
+
+	public static function get_custom_image_sizes() {
+		$sizes = array();
+		global $_wp_additional_image_sizes;
+		if ( is_array($_wp_additional_image_sizes) )
+			$sizes = array_merge( $sizes, $_wp_additional_image_sizes );
+
+		ksort( $sizes );
+		return $sizes;
 	}
 
 
