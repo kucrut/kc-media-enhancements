@@ -108,18 +108,12 @@ class kcMediaEnhancements {
 		if ( !isset($fields['image-size']['html']) || substr($post->post_mime_type, 0, 5) != 'image' )
 			return $fields;
 
-		if ( self::$data['kcSettingsOK'] ) {
-			$_sizes = kcSettings_options::$image_sizes_custom;
-		}
-		else {
-			global $_wp_additional_image_sizes;
-			$_sizes = $_wp_additional_image_sizes;
-		}
-		if ( empty($_sizes) )
+		global $_wp_additional_image_sizes;
+		if ( empty($_wp_additional_image_sizes) )
 			return $fields;
 
 		$items = array();
-		foreach ( array_keys($_sizes) as $size ) {
+		foreach ( array_keys($_wp_additional_image_sizes) as $size ) {
 			$img = image_get_intermediate_size( $post->ID, $size );
 			if ( !$img )
 				continue;
