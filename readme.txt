@@ -21,7 +21,7 @@ This plugin provides enhancements for media/attachment management, such as the a
 == Frequently Asked Questions ==
 
 = Can I only activate components I need? =
-Sure! By default, all components are enabled. If you have [KC Settings plugin] (http://wordpress.org/extend/plugins/kc-settings/) installed and activated, you'll have the luxury to select the components you need by visiting *Settings* &raquo; *KC Media Enhancements* in you dashboard.
+Sure! By default, all components are enabled. If you have [KC Settings plugin] (http://wordpress.org/extend/plugins/kc-settings/) installed and activated, you'll have the luxury to select the components you need by visiting *Settings* &raquo; *KC Media Enhc.* in you dashboard.
 
 If you don't want to use KC Setting plugin but still want to enable only certain components, you'll need to add this block of code to your theme's `functions.php` file and change each unwanted component's value to `false`:
 
