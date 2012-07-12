@@ -29,14 +29,8 @@ If you don't want to use KC Setting plugin but still want to enable only certain
 function my_kcme_options( $options ) {
 	$options = array(
 		'general' => array(
-			'components' => array(
-				'insert_custom_size'	=> true,
-				'taxonomies'					=> true
-			),
-			'taxonomies'	=> array(
-				'category'	=> true,
-				'post_tag'	=> true
-			)
+			'components' => array( 'insert_custom_size', 'taxonomies' ),
+			'taxonomies' => array( 'category', 'post_tag' )
 		)
 	);
 

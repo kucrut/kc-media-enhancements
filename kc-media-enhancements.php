@@ -83,15 +83,14 @@ class kcMediaEnhancements {
 			$options = apply_filters( 'kcme_options', self::$data['defaults'] );
 
 		self::$data['options'] = $options;
-		if ( !isset($options['general']['components']) || empty($options['general']['components']) )
+		if ( !isset($options['general']['components']) || !is_array($options['general']['components']) || empty($options['general']['components']) )
 			return;
 
-		$comp = $options['general']['components'];
 		# 0. Insert image with custom sizes
-		if ( ( isset($comp['insert_custom_size']) && $comp['insert_custom_size'] ) || in_array('insert_custom_size', $comp) )
+		if ( in_array('insert_custom_size', $options['general']['components']) )
 			add_filter( 'attachment_fields_to_edit', array(__CLASS__, 'insert_image'), 11, 2 );
 
-		# 1. Attachment taxonomie
+		# 1. Attachment taxonomies
 		/*
 		if ( isset($options['general']['components']['taxonomies'])
 					&& $options['general']['components']['taxonomies']
@@ -117,7 +116,13 @@ class kcMediaEnhancements {
 		if ( !isset($fields['image-size']['html']) || substr($post->post_mime_type, 0, 5) != 'image' )
 			return $fields;
 
-		$_sizes = self::$data['kcSettingsOK'] ? kcSettings_options::$image_sizes_custom : self::get_custom_image_sizes();
+		if ( self::$data['kcSettingsOK'] ) {
+			$_sizes = kcSettings_options::$image_sizes_custom;
+		}
+		else {
+			global $_wp_additional_image_sizes;
+			$_sizes = $_wp_additional_image_sizes;
+		}
 		if ( empty($_sizes) )
 			return $fields;
 
@@ -141,17 +146,6 @@ class kcMediaEnhancements {
 		$fields['image-size']['html'] = "{$fields['image-size']['html']}\n{$items}";
 
 		return $fields;
-	}
-
-
-	public static function get_custom_image_sizes() {
-		$sizes = array();
-		global $_wp_additional_image_sizes;
-		if ( is_array($_wp_additional_image_sizes) )
-			$sizes = array_merge( $sizes, $_wp_additional_image_sizes );
-
-		ksort( $sizes );
-		return $sizes;
 	}
 
 
