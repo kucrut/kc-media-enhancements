@@ -1,0 +1,64 @@
+# Copyright (C) 2010 KC Media Enhancements
+# This file is distributed under the same license as the KC Media Enhancements package.
+msgid ""
+msgstr ""
+"Project-Id-Version: KC Media Enhancements 0.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/kc-media-enhancements\n"
+"POT-Creation-Date: 2011-04-10 21:18:14+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2011-04-11 04:27+0700\n"
+"Last-Translator: Dzikri Aziz <kucrut@kucrut.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: kc-media-enhancements.php:39
+msgid "Enable insertion of images with custom sizes into post editor"
+msgstr "Aktifkan fitur penyisipan gambar dengan ukuran bebas ke dalam editor"
+
+#: kc-media-enhancements.php:40
+msgid "Enable taxonomies for attachments"
+msgstr "Aktifkan fitur taxonomy untuk attachment"
+
+#. #-#-#-#-#  kc-media-enhancements.pot (KC Media Enhancements 0.1)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: kc-media-enhancements.php:67
+msgid "KC Media Enhancements"
+msgstr "KC Media Enhancements"
+
+#: kc-media-enhancements.php:68
+msgid "KC Media Enhancements Settings"
+msgstr "Pengaturan KC Media Enhancements"
+
+#: kc-media-enhancements.php:72
+msgid "General"
+msgstr "Umum"
+
+#: kc-media-enhancements.php:76
+msgid "Components"
+msgstr "Komponen"
+
+#: kc-media-enhancements.php:82
+msgid "Taxonomies for attachments"
+msgstr "Taxonomy untuk attachment"
+
+#: kc-media-enhancements-inc/attachment_taxonomies.php:89
+msgid "Check/uncheck existing %s, or add new one(s), separated by commas."
+msgstr "Centang % yang tersedia atau tambahkan yang baru (pisahkan dengan koma)."
+
+#. Plugin URI of the plugin/theme
+msgid "http://kucrut.org/2011/04/kc-media-enhancements/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Enhance WordPress media/attachment management"
+msgstr "Fitur-fitur tambahan untuk manajemen media/attachment di WordPress"
+
+#. Author of the plugin/theme
+msgid "Dzikri Aziz"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://kucrut.org/"
+msgstr ""
+
