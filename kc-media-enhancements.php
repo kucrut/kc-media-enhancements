@@ -82,7 +82,7 @@ class kcMediaEnhancements {
 
 		# 0. Insert image with custom sizes
 		if ( in_array('insert_custom_size', $options['general']['components']) )
-			add_filter( 'attachment_fields_to_edit', array(__CLASS__, 'insert_image'), 11, 2 );
+			add_filter( 'image_size_names_choose', array(__CLASS__, 'insert_image'), 99 );
 
 		# 1. Attachment taxonomies
 		if (
@@ -104,34 +104,17 @@ class kcMediaEnhancements {
 	}
 
 
-	public static function insert_image( $fields, $post ) {
-		if ( !isset($fields['image-size']['html']) || substr($post->post_mime_type, 0, 5) != 'image' )
-			return $fields;
-
+	public static function insert_image( $sizes ) {
 		global $_wp_additional_image_sizes;
 		if ( empty($_wp_additional_image_sizes) )
-			return $fields;
+			return $sizes;
 
-		$items = array();
-		foreach ( array_keys($_wp_additional_image_sizes) as $size ) {
-			$img = image_get_intermediate_size( $post->ID, $size );
-			if ( !$img )
-				continue;
-
-			$css_id = "image-size-{$size}-{$post->ID}";
-			$html  = "<div class='image-size-item'>";
-			$html .= "<input type='radio' name='attachments[{$post->ID}][image-size]' id='{$css_id}' value='{$size}' />";
-			$html .= "<label for='{$css_id}'>{$size}</label>";
-			$html .= "<label for='{$css_id}' class='help'>" . sprintf( "(%d&nbsp;&times;&nbsp;%d)", $img['width'], $img['height'] ). "</label>";
-			$html .= "</div>";
-
-			$items[] = $html;
+		foreach ( $_wp_additional_image_sizes as $id => $data ) {
+			if ( !isset($sizes[$id]) )
+				$sizes[$id] = ucfirst( str_replace( '-', ' ', $id ) );
 		}
 
-		$items = join( "\n", $items );
-		$fields['image-size']['html'] = "{$fields['image-size']['html']}\n{$items}";
-
-		return $fields;
+		return $sizes;
 	}
 }
 add_action( 'plugins_loaded', array('kcMediaEnhancements', 'prepare') );
