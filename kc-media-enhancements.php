@@ -118,5 +118,3 @@ class kcMediaEnhancements {
 	}
 }
 add_action( 'plugins_loaded', array('kcMediaEnhancements', 'prepare') );
-
-?>
