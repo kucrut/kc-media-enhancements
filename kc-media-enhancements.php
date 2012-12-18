@@ -4,7 +4,7 @@
 Plugin name: KC Media Enhancements
 Plugin URI: http://kucrut.org/2011/04/kc-media-enhancements/
 Description: Enhance WordPress media/attachment management
-Version: 0.3
+Version: 0.4
 Author: Dzikri Aziz
 Author URI: http://kucrut.org/
 License: GPL v2
@@ -22,7 +22,7 @@ class kcMediaEnhancements {
 	);
 
 
-	public static function prepare() {
+	public static function _setup() {
 		add_image_size( 'kcme-test', 1000, 200, true );
 
 		self::$data['inc_path'] = dirname(__FILE__) . '/kc-media-enhancements-inc';
@@ -31,12 +31,12 @@ class kcMediaEnhancements {
 		# i18n
 		load_plugin_textdomain( 'kc-media-enhancements', false, 'kc-media-enhancements/kc-media-enhancements-inc/languages' );
 
-		add_filter( 'kc_plugin_settings', array(__CLASS__, 'settings') );
-		add_action( 'admin_init', array(__CLASS__, 'init') );
+		add_action( 'init', array(__CLASS__, '_init'), 100 );
+		add_filter( 'kc_plugin_settings', array(__CLASS__, '_settings') );
 	}
 
 
-	public static function settings( $groups ) {
+	public static function _settings( $groups ) {
 		$groups[] = array(
 			'prefix'     => 'kc-media-enhancements',
 			'menu_title' => 'KC Media Enhc.',
@@ -70,14 +70,14 @@ class kcMediaEnhancements {
 	}
 
 
-	public static function init() {
+	public static function _init() {
 		if ( self::$data['kcSettingsOK'] )
 			$options = kc_get_option( 'kc-media-enhancements' );
 		else
 			$options = apply_filters( 'kcme_options', self::$data['defaults'] );
 
 		self::$data['options'] = $options;
-		if ( !isset($options['general']['components']) || !is_array($options['general']['components']) || empty($options['general']['components']) )
+		if ( empty($options['general']['components']) || !is_array($options['general']['components']) )
 			return;
 
 		# 0. Insert image with custom sizes
@@ -87,19 +87,16 @@ class kcMediaEnhancements {
 		# 1. Attachment taxonomies
 		if (
 			!in_array('taxonomies', $options['general']['components'])
-			|| !is_array($options['general']['taxonomies'])
 			|| empty($options['general']['taxonomies'])
+			|| !is_array($options['general']['taxonomies'])
 		)
 			return;
 
-		$taxonomies = array();
-		foreach ( $options['general']['taxonomies'] as $tax )
-			if ( taxonomy_exists( $tax ) )
-				$taxonomies[] = $tax;
-
-		if ( !empty($taxonomies) ) {
-			require_once( self::$data['inc_path'] . '/attachment_taxonomies.php' );
-			kcmeAttachmentTaxonomies::init( $taxonomies );
+		$media_taxonomies = get_object_taxonomies( 'attachment' );
+		foreach ( $options['general']['taxonomies'] as $tax ) {
+			if ( taxonomy_exists( $tax ) && !in_array($tax, $media_taxonomies) ) {
+				register_taxonomy_for_object_type( $tax, 'attachment' );
+			}
 		}
 	}
 
@@ -117,4 +114,4 @@ class kcMediaEnhancements {
 		return $sizes;
 	}
 }
-add_action( 'plugins_loaded', array('kcMediaEnhancements', 'prepare') );
+add_action( 'plugins_loaded', array('kcMediaEnhancements', '_setup') );

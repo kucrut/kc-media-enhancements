@@ -2,9 +2,9 @@
 Contributors: kucrut
 Donate link: http://kucrut.org/
 Tags: media, attachment, taxonomy, terms, category, tag
-Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: 0.3
+Requires at least: 3.5
+Tested up to: 3.5
+Stable tag: 0.4
 
 Enhance WordPress media/attachment management
 
@@ -54,6 +54,9 @@ If this is the case, you need to rebuild the image's thumbnails using Viper007Bo
 
 
 == Changelog ==
+
+= 0.4 =
+* Requires WordPress 3.5
 
 = 0.1 =
 * Initial release
