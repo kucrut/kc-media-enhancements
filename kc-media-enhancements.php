@@ -44,10 +44,11 @@ class kcMediaEnhancements {
 
 	public static function _settings( $groups ) {
 		$groups[] = array(
-			'prefix'     => 'kc-media-enhancements',
-			'menu_title' => 'KC Media Enhc.',
-			'page_title' => sprintf( __('%s Settings', 'kc-media-enhancements'), 'KC Media Enhancements' ),
-			'options'    => array(
+			'prefix'        => 'kc-media-enhancements',
+			'menu_location' => 'upload.php',
+			'menu_title'    => __('Enhancements', 'kc-media-enhancements'),
+			'page_title'    => sprintf( __('%s Settings', 'kc-media-enhancements'), 'KC Media Enhancements' ),
+			'options'       => array(
 				'general'  => array(
 					'id'     => 'general',
 					'title'  => __('General', 'kc-media-enhancements'),
