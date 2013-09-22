@@ -171,7 +171,7 @@ class kcMediaEnhancements {
 		ob_start();
 		?>
 			<div class="media-terms">
-				<div class="available" style="max-height:11em;overflow:auto">
+				<div class="available" style="max-height:11em;overflow:auto;margin-bottom:.5em">
 					<?php foreach ( $taxonomy_terms as $term ) : ?>
 						<label>
 							<input type="checkbox" name="<?php echo esc_attr( sprintf( 'attachments[%d][%s-terms][available][%s]', $post->ID, $taxonomy, $term->slug ) ) ?>" value="1"<?php checked( in_array( $term->slug, $media_terms ) ) ?> />
