@@ -3,14 +3,14 @@ Contributors: kucrut
 Donate link: http://kucrut.org/
 Tags: media, attachment, taxonomy, terms, category, tag
 Requires at least: 3.5
-Tested up to: 3.5
-Stable tag: 0.4
+Tested up to: 3.6.1
+Stable tag: 0.5
 
 Enhance WordPress media/attachment management
 
 == Description ==
 
-This plugin provides enhancements for media/attachment management, such as the ability to insert images with custom size into posts and set terms for the attachments files.
+This plugin provides enhancements for media/attachment management; the ability to insert images with custom size into posts and set terms for the attachments files.
 
 == Installation ==
 
@@ -21,7 +21,7 @@ This plugin provides enhancements for media/attachment management, such as the a
 == Frequently Asked Questions ==
 
 = Can I only activate components I need? =
-Sure! By default, all components are enabled. If you have [KC Settings plugin] (http://wordpress.org/extend/plugins/kc-settings/) installed and activated, you'll have the luxury to select the components you need by visiting *Settings* &raquo; *KC Media Enhc.* in you dashboard.
+Sure! By default, all components are enabled. If you have [KC Settings plugin] (http://wordpress.org/extend/plugins/kc-settings/) installed and activated, you'll have the luxury to select the components you need by visiting *Media* &raquo; *Enhancements* in you dashboard.
 
 If you don't want to use KC Setting plugin but still want to enable only certain components, you'll need to add this block of code to your theme's `functions.php` file and change each unwanted component's value to `false`:
 
@@ -54,6 +54,11 @@ If this is the case, you need to rebuild the image's thumbnails using Viper007Bo
 
 
 == Changelog ==
+
+= 0.5 =
+* Replace default taxonomy terms input fields on media library lighbox with checkboxes and an input field to add new terms
+* Blacklist post_format
+* Move setting menu under Media
 
 = 0.4 =
 * Requires WordPress 3.5
