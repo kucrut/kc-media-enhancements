@@ -24,16 +24,21 @@ class kcMediaEnhancements {
 
 
 	public static function _setup() {
-		add_image_size( 'kcme-test', 1000, 200, true );
-
 		self::$_data['inc_path'] = dirname(__FILE__) . '/kc-media-enhancements-inc';
-		self::$_data['kcSettingsOK'] = class_exists( 'kcSettings' );
 
 		# i18n
 		load_plugin_textdomain( 'kc-media-enhancements', false, 'kc-media-enhancements/kc-media-enhancements-inc/languages' );
 
 		add_action( 'init', array(__CLASS__, '_init'), 100 );
 		add_filter( 'kc_plugin_settings', array(__CLASS__, '_settings') );
+	}
+
+
+	public static function _get_taxonomies() {
+		$taxonomies = kcSettings_options::$taxonomies;
+		unset( $taxonomies['post_format'] );
+
+		return $taxonomies;
 	}
 
 
@@ -60,7 +65,7 @@ class kcMediaEnhancements {
 							'id'      => 'taxonomies',
 							'title'   => __('Taxonomies for attachments', 'kc-media-enhancements'),
 							'type'    => 'checkbox',
-							'options' => kcSettings_options::$taxonomies
+							'options' => array( __CLASS__, '_get_taxonomies' ),
 						)
 					)
 				)
@@ -72,31 +77,37 @@ class kcMediaEnhancements {
 
 
 	public static function _init() {
-		if ( self::$_data['kcSettingsOK'] )
-			$options = kc_get_option( 'kc-media-enhancements' );
+		if ( class_exists( 'kcSettings' ) )
+			self::$_data['options'] = kc_get_option( 'kc-media-enhancements' );
 		else
-			$options = apply_filters( 'kcme_options', self::$_data['defaults'] );
+			self::$_data['options'] = apply_filters( 'kcme_options', self::$_data['defaults'] );
 
-		self::$_data['options'] = $options;
-		if ( empty($options['general']['components']) || !is_array($options['general']['components']) )
+		if ( empty(self::$_data['options']['general']['components']) || !is_array(self::$_data['options']['general']['components']) )
 			return;
 
 		# 0. Insert image with custom sizes
-		if ( in_array('insert_custom_size', $options['general']['components']) )
+		if ( in_array('insert_custom_size', self::$_data['options']['general']['components']) )
 			add_filter( 'image_size_names_choose', array(__CLASS__, 'insert_image'), 99 );
 
 		# 1. Attachment taxonomies
 		if (
-			!in_array('taxonomies', $options['general']['components'])
-			|| empty($options['general']['taxonomies'])
-			|| !is_array($options['general']['taxonomies'])
+			!in_array('taxonomies', self::$_data['options']['general']['components'])
+			|| empty(self::$_data['options']['general']['taxonomies'])
+			|| !is_array(self::$_data['options']['general']['taxonomies'])
 		)
 			return;
 
+		// Blacklist post_format
+		$taxonomies = array_fill_keys( self::$_data['options']['general']['taxonomies'], true );
+		unset( $taxonomies['post_format'] );
+		self::$_data['options']['general']['taxonomies'] = array_keys( $taxonomies );
+		if ( empty(self::$_data['options']['general']['taxonomies']) )
+			return;
+
 		$media_taxonomies = get_object_taxonomies( 'attachment' );
-		foreach ( $options['general']['taxonomies'] as $tax ) {
-			if ( taxonomy_exists( $tax ) && !in_array($tax, $media_taxonomies) ) {
-				register_taxonomy_for_object_type( $tax, 'attachment' );
+		foreach ( self::$_data['options']['general']['taxonomies'] as $taxonomy ) {
+			if ( taxonomy_exists( $taxonomy ) && !in_array( $taxonomy, $media_taxonomies ) ) {
+				register_taxonomy_for_object_type( $taxonomy, 'attachment' );
 			}
 		}
 
