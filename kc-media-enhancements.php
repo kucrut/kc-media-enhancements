@@ -4,7 +4,7 @@
  * Plugin name: KC Media Enhancements
  * Plugin URI: http://kucrut.org/2011/04/kc-media-enhancements/
  * Description: Enhance WordPress media/attachment management
- * Version: 0.5-dev
+ * Version: 0.6
  * Author: Dzikri Aziz
  * Author URI: http://kucrut.org/
  * License: GPL v2
@@ -15,7 +15,7 @@ class Kc_Media_Enhancements {
 
 	const PREFIX = 'kc-media-enhancements';
 
-	const VERSION = '0.5-dev';
+	const VERSION = '0.6';
 
 	/**
 	 * Plugin class data

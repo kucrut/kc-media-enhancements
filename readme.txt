@@ -4,7 +4,7 @@ Donate link: http://kucrut.org/
 Tags: media, attachment, taxonomy, terms, category, tag
 Requires at least: 3.5
 Tested up to: 3.6.1
-Stable tag: 0.5
+Stable tag: 0.6
 
 Enhance WordPress media/attachment management
 
