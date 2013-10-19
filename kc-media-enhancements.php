@@ -11,7 +11,7 @@
  * Text Domain: kc-media-enhancements
  */
 
-class kcMediaEnhancements {
+class Kc_Media_Enhancements {
 
 	const PREFIX = 'kc-media-enhancements';
 
@@ -278,4 +278,4 @@ class kcMediaEnhancements {
 		return $sizes;
 	}
 }
-add_action( 'plugins_loaded', array( 'kcMediaEnhancements', '_setup' ) );
+add_action( 'plugins_loaded', array( 'Kc_Media_Enhancements', '_setup' ) );
