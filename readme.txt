@@ -55,6 +55,9 @@ If this is the case, you need to rebuild the image's thumbnails using Viper007Bo
 
 == Changelog ==
 
+= 0.6 =
+* Use jQuery UI autocomplete for displaying terms instead of using checkboxes
+
 = 0.5 =
 * Replace default taxonomy terms input fields on media library lighbox with checkboxes and an input field to add new terms
 * Blacklist post_format
