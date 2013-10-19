@@ -13,6 +13,10 @@
 
 class kcMediaEnhancements {
 
+	const PREFIX = 'kc-media-enhancements';
+
+	const VERSION = '0.5-dev';
+
 	private static $_data = array(
 		'defaults' => array(
 			'general' => array(
@@ -116,101 +120,82 @@ class kcMediaEnhancements {
 			}
 		}
 
-		add_filter( 'attachment_fields_to_edit', array(__CLASS__, '_add_media_term_fields' ),  99, 2 );
-		add_filter( 'attachment_fields_to_save', array(__CLASS__, '_save_media_term_fields' ), 99, 2 );
+		add_action( 'attachment_fields_to_edit', array( __CLASS__, '_modify_media_taxonomy_fields' ), 99, 2 );
+		add_action( 'wp_enqueue_media',         array( __CLASS__, '_enqueue_assets' ) );
 	}
 
 
-	/**
-	 * Add/Replace taxonomy term fields on Media Manager lightbox
-	 *
-	 * @param array  $form_fields Form fields
-	 * @param object $post        WP_Post object
-	 *
-	 * @return array $form_fields
-	 */
-	public static function _add_media_term_fields( $form_fields, $post ) {
-		foreach ( self::$_data['options']['general']['taxonomies'] as $taxonomy ) {
+	public static function _modify_media_taxonomy_fields( $form_fields, $post ) {
+		$taxonomies = get_object_taxonomies( 'attachment' );
+		if ( empty($taxonomies) )
+			return;
+
+		foreach ( $taxonomies as $taxonomy ) {
 			if ( !isset( $form_fields[ $taxonomy ] ) )
 				continue;
 
-			$form_fields[ "{$taxonomy}-terms" ] = array(
-				'label'        => $form_fields[ $taxonomy ]['label'],
-				'input'        => 'html',
-				'html'         => self::_get_taxonomy_field( $post, $taxonomy ),
-				'show_in_edit' => false,
+			$form_fields[ $taxonomy ] = array_merge(
+				$form_fields[ $taxonomy ],
+				array(
+					'input' => 'html',
+					'html'  => sprintf(
+						'<input type="text" class="text tax-terms" id="%s" name="%s" value="%s" data-taxonomy="%s" placeholder="%s" />',
+						esc_attr( sprintf( 'attachments-%d-%s', $post->ID, $taxonomy ) ),
+						esc_attr( sprintf( 'attachments[%d][%s]', $post->ID, $taxonomy ) ),
+						esc_attr( $form_fields[ $taxonomy ]['value'] ),
+						esc_attr( $taxonomy ),
+						esc_attr__( 'Start typing&hellip;', 'kc-media-enhancements' )
+					),
+				)
 			);
-
-			unset( $form_fields[ $taxonomy ] );
 		}
 
 		return $form_fields;
 	}
 
 
-	/**
-	 * Get taxonomy term fields for Media Manager lightbox
-	 *
-	 * @param object $post     WP_Post object
-	 * @param string $taxonomy Taxonomy name
-	 *
-	 * @return string Taxonomy term fields HTML
-	 */
-	private static function _get_taxonomy_field( $post, $taxonomy ) {
-		$taxonomy_object = get_taxonomy( $taxonomy );
-		$taxonomy_terms  = get_terms( $taxonomy, array(	'hide_empty' => false ) );
+	public static function get_terms_slugs( $taxonomy ) {
+		if ( !taxonomy_exists($taxonomy) )
+			return false;
 
-		if ( empty($taxonomy_object->args) ) {
-			$taxonomy_object->args = array();
-		}
-		$terms = get_object_term_cache( $post->ID, $taxonomy );
-		if ( false === $terms ) {
-			$terms = wp_get_object_terms( $post->ID, $taxonomy, $taxonomy_object->args );
-		}
-		$media_terms = array();
-		foreach ( $terms as $term ) {
-			$media_terms[] = $term->slug;
+		$terms_slugs = get_terms( $taxonomy, array( 'hide_empty' => false ) );
+		if ( !empty($terms_slugs) ) {
+			$terms_slugs = wp_list_pluck( $terms_slugs, 'slug' );
 		}
 
-		ob_start();
-		?>
-			<div class="media-terms">
-				<div class="available" style="max-height:11em;overflow:auto;margin-bottom:.5em">
-					<?php foreach ( $taxonomy_terms as $term ) : ?>
-						<label>
-							<input type="checkbox" name="<?php echo esc_attr( sprintf( 'attachments[%d][%s-terms][available][%s]', $post->ID, $taxonomy, $term->slug ) ) ?>" value="1"<?php checked( in_array( $term->slug, $media_terms ) ) ?> />
-							<?php echo esc_html( $term->name ) ?>
-						</label><br />
-					<?php endforeach; ?>
-				</div>
-				<div class="new">
-					<input type="text" name="<?php echo esc_attr( sprintf( 'attachments[%d][%s-terms][new]', $post->ID, $taxonomy ) ) ?>" />
-					<p class="description" style="margin-bottom:0"><?php printf( esc_html__('Insert new %s separated by commas.', 'kc-media-enhancements'), strtolower($taxonomy_object->labels->name) ) ?></p>
-				</div>
-			</div>
-		<?php
-		return ob_get_clean();
+		return $terms_slugs;
 	}
 
 
-	/**
-	 * Save media terms
-	 *
-	 * @param object $post            WP_Post object
-	 * @param array  $attachment_data Attachment post data
-	 */
-	public static function _save_media_term_fields( $post, $attachment_data ) {
-		foreach ( self::$_data['options']['general']['taxonomies'] as $taxonomy ) {
-			$terms =
-				!empty( $attachment_data["{$taxonomy}-terms"]['available'] )
-				? array_filter( array_keys( $attachment_data["{$taxonomy}-terms"]['available'] ) )
-				: array();
-			if ( !empty($attachment_data["{$taxonomy}-terms"]['new']) ) {
-				$terms = array_merge( $terms, explode( ',', $attachment_data["{$taxonomy}-terms"]['new'] ) );
-			}
+	public static function _enqueue_assets() {
+		$include_url = sprintf(
+			'%s%s-inc',
+			trailingslashit( plugin_dir_url( __FILE__ ) ),
+			self::PREFIX
+		);
+		wp_enqueue_style (
+			'kc-me-jquery-ui',
+			$include_url . '/css/jquery-ui/jquery.ui.all.css',
+			false,
+			null
+		);
+		wp_enqueue_script(
+			'kc-me',
+			$include_url . '/js/kc-me.js',
+			array( 'jquery-ui-autocomplete' ),
+			self::VERSION,
+			true
+		);
 
-			wp_set_object_terms( $post['ID'], array_map( 'trim', $terms ), $taxonomy, false );
+		$taxonomies = get_object_taxonomies( 'attachment' );
+		if ( empty( $taxonomies ) )
+			return;
+
+		$taxonomy_terms = array();
+		foreach ( $taxonomies as $taxonomy ) {
+			$taxonomy_terms[  $taxonomy ] = self::get_terms_slugs( $taxonomy );
 		}
+		wp_localize_script( 'kc-me', 'kcmeTaxTerms', $taxonomy_terms );
 	}
 
 
