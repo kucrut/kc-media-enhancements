@@ -1,15 +1,15 @@
 <?php
 
-/*
-Plugin name: KC Media Enhancements
-Plugin URI: http://kucrut.org/2011/04/kc-media-enhancements/
-Description: Add taxonomy support for media and append custom image sizes to image size selction dropdown
-Version: 0.5
-Author: Dzikri Aziz
-Author URI: http://kucrut.org/
-License: GPL v2
-Text Domain: kc-media-enhancements
-*/
+/**
+ * Plugin name: KC Media Enhancements
+ * Plugin URI: http://kucrut.org/2011/04/kc-media-enhancements/
+ * Description: Enhance WordPress media/attachment management
+ * Version: 0.5-dev
+ * Author: Dzikri Aziz
+ * Author URI: http://kucrut.org/
+ * License: GPL v2
+ * Text Domain: kc-media-enhancements
+ */
 
 class kcMediaEnhancements {
 
