@@ -27,7 +27,11 @@ class kcMediaEnhancements {
 		self::$_data['inc_path'] = dirname(__FILE__) . '/kc-media-enhancements-inc';
 
 		# i18n
-		load_plugin_textdomain( 'kc-media-enhancements', false, 'kc-media-enhancements/kc-media-enhancements-inc/languages' );
+		load_plugin_textdomain(
+			'kc-media-enhancements',
+			false,
+			'kc-media-enhancements/kc-media-enhancements-inc/languages'
+		);
 
 		add_action( 'init', array(__CLASS__, '_init'), 100 );
 		add_filter( 'kc_plugin_settings', array(__CLASS__, '_settings') );
