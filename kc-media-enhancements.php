@@ -17,16 +17,27 @@ class kcMediaEnhancements {
 
 	const VERSION = '0.5-dev';
 
+	/**
+	 * Plugin class data
+	 */
 	private static $_data = array(
 		'defaults' => array(
 			'general' => array(
 				'components' => array( 'insert_custom_size', 'taxonomies' ),
-				'taxonomies' => array( 'category', 'post_tag' )
+				'taxonomies' => array( 'category', 'post_tag' ),
 			),
 		),
 	);
 
 
+	/**
+	 * Setup plugin
+	 *
+	 * @since 0.1
+	 * @wp_hook action plugins_loaded
+	 *
+	 * @return void
+	 */
 	public static function _setup() {
 		self::$_data['inc_path'] = dirname(__FILE__) . '/kc-media-enhancements-inc';
 
@@ -42,14 +53,31 @@ class kcMediaEnhancements {
 	}
 
 
+	/**
+	 * Get registered taxonomies
+	 *
+	 * @since 0.1
+	 *
+	 * @return array Array of taxonomy object
+	 */
 	public static function _get_taxonomies() {
-		$taxonomies = kcSettings_options::$taxonomies;
+		$taxonomies = kcSettings_options::taxonomies( false );
 		unset( $taxonomies['post_format'] );
 
 		return $taxonomies;
 	}
 
 
+	/**
+	 * KC Settings entry
+	 *
+	 * @since 0.2
+	 * @wp_hook filter kc_plugin_settings
+	 *
+	 * @param array $groups Settings groups
+	 *
+	 * @return array
+	 */
 	public static function _settings( $groups ) {
 		$groups[] = array(
 			'prefix'        => 'kc-media-enhancements',
@@ -125,6 +153,17 @@ class kcMediaEnhancements {
 	}
 
 
+	/**
+	 * Modify Media Taxonomy Fields on media post edit
+	 *
+	 * @since 0.5
+	 * @wp_hook action attachment_fields_to_edit
+	 *
+	 * @param array  $form_fields Attachment metadata form fields
+	 * @param object $post       Attachment post object
+	 *
+	 * @return array
+	 */
 	public static function _modify_media_taxonomy_fields( $form_fields, $post ) {
 		$taxonomies = get_object_taxonomies( 'attachment' );
 		if ( empty($taxonomies) )
@@ -154,6 +193,15 @@ class kcMediaEnhancements {
 	}
 
 
+	/**
+	 * Get taxonomy term slugs
+	 *
+	 * @since 0.5
+	 *
+	 * @param string $taxonomy Taxonomy name
+	 *
+	 * @return mixed Array of taxonomy term slugs or false if taxonomy doesn't exist
+	 */
 	public static function get_terms_slugs( $taxonomy ) {
 		if ( !taxonomy_exists($taxonomy) )
 			return false;
@@ -167,6 +215,14 @@ class kcMediaEnhancements {
 	}
 
 
+	/**
+	 * Enqueue assets for taxonomy terms autocomplete on media edit screen
+	 *
+	 * @since 0.5
+	 * @wp_hook action wp_enqueue_media
+	 *
+	 * @return void
+	 */
 	public static function _enqueue_assets() {
 		$include_url = sprintf(
 			'%s%s-inc',
@@ -199,6 +255,16 @@ class kcMediaEnhancements {
 	}
 
 
+	/**
+	 * Add custom image sizes to size selection dropdown on media edit screen
+	 *
+	 * @since 0.3
+	 * @wp_hook image_size_names_choose
+	 *
+	 * @param array $sizes Image size names
+	 *
+	 * @return array
+	 */
 	public static function insert_image( $sizes ) {
 		global $_wp_additional_image_sizes;
 		if ( empty($_wp_additional_image_sizes) )
